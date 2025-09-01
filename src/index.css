@@ -1,0 +1,557 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core background and text colors */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    
+    /* Card colors */
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    
+    /* Popover colors */
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    
+    /* Primary brand colors - Modern blue */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 98%;
+    --primary-50: 217 91% 97%;
+    --primary-100: 217 91% 92%;
+    --primary-200: 217 91% 83%;
+    --primary-300: 217 91% 71%;
+    --primary-400: 217 91% 60%;
+    --primary-500: 217 91% 50%;
+    --primary-600: 217 91% 42%;
+    --primary-700: 217 91% 35%;
+    --primary-800: 217 91% 28%;
+    --primary-900: 217 91% 22%;
+    
+    /* Secondary colors - Cool gray */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 9% 46%;
+    
+    /* Muted colors for subtle elements */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    
+    /* Accent colors for interactive elements */
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 9% 15%;
+    
+    /* Destructive/Error colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Success colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    
+    /* Warning colors */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+    
+    /* Border and input colors */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
+    
+    /* Sidebar specific colors */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
+    
+    /* Modern gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 70%) 50%, hsl(217 91% 60%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(220 14% 96%) 0%, hsl(220 14% 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
+    
+    /* Enhanced shadows for depth */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    
+    /* Border radius for consistent design */
+    --radius: 0.75rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    
+    /* Typography scale */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    
+    /* Spacing scale */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+  }
+
+.dark {
+  /* Modern dark mode with proper contrast and accessibility */
+
+  /* Core background and text colors */
+  --background: 222 84% 5%;          /* Very dark gray-blue */
+  --foreground: 210 40% 98%;         /* Near white text */
+
+  /* Cards and surfaces */
+  --card: 222 84% 8%;
+  --card-foreground: 210 40% 95%;
+  --popover: 222 84% 10%;
+  --popover-foreground: 210 40% 98%;
+
+  /* Primary colors - consistent with light mode but darker */
+  --primary: 217 91% 65%;
+  --primary-foreground: 222 84% 5%;
+  --primary-50: 217 91% 85%;
+  --primary-100: 217 91% 80%;
+  --primary-200: 217 91% 75%;
+  --primary-300: 217 91% 70%;
+  --primary-400: 217 91% 65%;
+  --primary-500: 217 91% 60%;
+  --primary-600: 217 91% 55%;
+  --primary-700: 217 91% 50%;
+  --primary-800: 217 91% 45%;
+  --primary-900: 217 91% 40%;
+
+  /* Secondary colors */
+  --secondary: 217 32% 17%;
+  --secondary-foreground: 210 40% 90%;
+
+  /* Muted colors */
+  --muted: 217 32% 17%;
+  --muted-foreground: 215 20% 65%;
+
+  /* Accent colors */
+  --accent: 217 32% 20%;
+  --accent-foreground: 210 40% 95%;
+
+  /* Destructive colors */
+  --destructive: 0 63% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  /* Success and warning */
+  --success: 142 76% 45%;
+  --success-foreground: 210 40% 98%;
+  --warning: 38 92% 60%;
+  --warning-foreground: 222 84% 5%;
+
+  /* Border and input */
+  --border: 217 32% 22%;
+  --input: 217 32% 22%;
+  --ring: 217 91% 65%;
+
+  /* Sidebar colors */
+  --sidebar-background: 222 84% 6%;
+  --sidebar-foreground: 210 40% 95%;
+  --sidebar-primary: 217 91% 65%;
+  --sidebar-primary-foreground: 222 84% 5%;
+  --sidebar-accent: 217 32% 17%;
+  --sidebar-accent-foreground: 210 40% 95%;
+  --sidebar-border: 217 32% 22%;
+  --sidebar-ring: 217 91% 65%;
+
+  /* Modern gradients for dark mode */
+  --gradient-primary: linear-gradient(135deg, hsl(217 91% 65%) 0%, hsl(217 91% 70%) 50%, hsl(217 91% 60%) 100%);
+  --gradient-secondary: linear-gradient(135deg, hsl(222 84% 8%) 0%, hsl(217 32% 17%) 100%);
+  --gradient-accent: linear-gradient(135deg, hsl(217 91% 65%) 0%, hsl(217 91% 55%) 100%);
+}
+  
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100dvh;
+    /* Mobile app enhancements */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  /* Safe area support for mobile apps */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Mobile tap highlights */
+  * {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* Re-enable text selection for inputs and content areas */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+
+  /* Improved focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced text rendering */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    line-height: 1.2;
+  }
+
+  /* Utility classes for animations */
+  .animate-in {
+    animation: animate-in 0.6s ease-out;
+  }
+
+  .animate-out {
+    animation: animate-out 0.6s ease-out;
+  }
+
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes animate-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+
+  /* Modern scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+
+  /* Hide scrollbar for mobile navigation */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Loading animations */
+  .loading-pulse {
+    animation: loading-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes loading-pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* Enhanced floating animations for login page */
+  .animate-gentle-float {
+    animation: gentle-float var(--duration, 25s) infinite linear;
+  }
+
+  .animate-fade-float {
+    animation: fade-float var(--duration, 30s) infinite ease-in-out;
+  }
+
+  @keyframes gentle-float {
+    0% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 0.7;
+    }
+    90% {
+      opacity: 0.3;
+    }
+    100% {
+      transform: translate(100vw, -20px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-float {
+    0%, 100% {
+      transform: translateY(0px);
+      opacity: 0.2;
+    }
+    25% {
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-15px);
+      opacity: 0.8;
+    }
+    75% {
+      opacity: 0.4;
+    }
+  }
+
+  /* Progress indicator styles */
+  .step-indicator {
+    @apply flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-medium transition-all duration-300;
+  }
+
+  .step-indicator.active {
+    @apply bg-primary border-primary text-primary-foreground;
+  }
+
+  .step-indicator.completed {
+    @apply bg-success border-success text-success-foreground;
+  }
+
+  .step-indicator.pending {
+    @apply bg-background border-border text-muted-foreground;
+  }
+
+  /* Step transitions */
+  .step-transition {
+    @apply transition-all duration-500 ease-in-out;
+  }
+
+  /* Touch manipulation for better mobile interaction */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Improved mobile scrolling */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Mobile navigation enhancements */
+  .mobile-nav-item {
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+
+  /* Fix mobile viewport height issues */
+  .mobile-full-height {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  }
+
+  /* Mobile-specific improvements */
+  @media (max-width: 768px) {
+    /* Root container optimization */
+    #root {
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Improve touch targets */
+    button, a, [role="button"] {
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+    
+    /* Prevent zoom on input focus */
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="number"],
+    textarea, 
+    select {
+      font-size: 16px !important;
+      transform: translateZ(0);
+    }
+    
+    /* Smooth scroll for mobile */
+    html {
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Mobile card optimizations */
+    .card {
+      margin: 0 !important;
+      border-radius: 0.75rem;
+    }
+
+    /* Better mobile form styling */
+    .mobile-form-field {
+      @apply h-12 text-base;
+    }
+
+    /* Optimize mobile layout spacing */
+    .container {
+      @apply px-3;
+    }
+
+    /* Reduce heading sizes for mobile */
+    h1 {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    /* Mobile grid adjustments */
+    .grid-cols-2 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-3 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .grid-cols-4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Ensure dropdowns appear above everything */
+    [data-radix-popper-content-wrapper] {
+      z-index: 9999 !important;
+    }
+
+    /* Mobile scrollable containers */
+    .mobile-scroll {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    /* Mobile bottom navigation padding */
+    .mobile-content-padding {
+      padding-bottom: 6rem;
+    }
+
+    /* Improve mobile button spacing */
+    .mobile-button-group {
+      @apply flex flex-col gap-3 w-full;
+    }
+
+    .mobile-button-group > button {
+      @apply w-full;
+    }
+
+    /* Ensure mobile tabs wrapper has proper spacing */
+    .mobile-content-wrapper {
+      @apply px-3;
+    }
+
+    /* Improve mobile card spacing */
+    .space-y-6 > * + * {
+      @apply !mt-4;
+    }
+
+    /* Mobile-specific padding for tab content */
+    [role="tabpanel"] {
+      @apply px-1;
+    }
+
+    /* Better mobile text sizing */
+    h1 {
+      @apply text-xl;
+    }
+    
+    h2 {
+      @apply text-lg;
+    }
+
+    /* Ensure dropdowns have proper z-index and background */
+    [data-radix-portal] {
+      z-index: 999 !important;
+    }
+  }
+}
