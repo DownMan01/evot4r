@@ -9,7 +9,7 @@ import { VotingAnalyticsDialog } from '@/components/VotingAnalyticsDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { usePermissions } from '@/hooks/usePermissions';
 import { ResultsViewSkeleton } from '@/components/UnifiedLoadingSkeleton';
-import { Trophy, TrendingUp, Search, BarChart3 } from 'lucide-react';
+import { ExternalLink, Trophy, TrendingUp, Search, BarChart3 } from 'lucide-react';
 
 interface ElectionResult {
   election_id: string;
@@ -263,15 +263,25 @@ export const Results = () => {
     <>
       <div className="space-y-3 lg:space-y-4 pb-4 lg:pb-0 p-2">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
-          <h2 className="text-lg lg:text-xl font-bold">Election Results</h2>
-          <RefreshButton
-            onClick={fetchResults}
-            loading={loading}
-            disabled={loading}
-            className="w-full sm:w-auto"
-            text="Refresh Data"
-            mobileText="Refresh"
-          />
+        <h2 className="text-lg lg:text-2xl font-bold"></h2>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+            <Button
+                onClick={() => window.open('https://blockchain.evotar.xyz/', '_blank')}
+                className="flex items-center gap-2 flex-1 sm:flex-initial"
+                  >
+            <ExternalLink className="h-4 w-4" />
+                Verify Results
+            </Button>
+
+      <RefreshButton
+          onClick={fetchResults}
+          loading={loading}
+          disabled={loading}
+          className="flex-1 sm:flex-initial"
+          text="Refresh Data"
+          mobileText="Refresh"
+            />
+      </div>
         </div>
 
         <div className="relative">
