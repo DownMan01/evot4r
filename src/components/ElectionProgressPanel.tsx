@@ -5,6 +5,7 @@ import { useOptimizedElections } from '@/hooks/useOptimizedElections';
 import { usePermissions } from '@/hooks/usePermissions';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Calendar, Clock, Users, BarChart3, CheckCircle } from 'lucide-react';
+import { calculateProgressPhilippine, formatPhilippineDateTime } from '@/utils/dateUtils';
 
 export const ElectionProgressPanel = () => {
   const { elections, loading } = useOptimizedElections({ limit: 50, refetchInterval: 30000 });
@@ -41,25 +42,11 @@ export const ElectionProgressPanel = () => {
   };
 
   const calculateProgress = (startDate: string, endDate: string) => {
-    const now = new Date();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    
-    if (now < start) return 0;
-    if (now > end) return 100;
-    
-    const totalDuration = end.getTime() - start.getTime();
-    const elapsed = now.getTime() - start.getTime();
-    return Math.round((elapsed / totalDuration) * 100);
+    return calculateProgressPhilippine(startDate, endDate) * 100;
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    return formatPhilippineDateTime(dateString, 'MMM dd, h:mm a');
   };
 
   return (

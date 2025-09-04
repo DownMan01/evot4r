@@ -191,12 +191,11 @@ const Dashboard = () => {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="relative h-8 w-8 md:h-10 md:w-10 rounded-full bg-gradient-primary hover:shadow-lg transition-all duration-200"
-                    >
-                      <div className="h-full w-full rounded-full bg-background/20 flex items-center justify-center">
-                        <User className="h-3 w-3 md:h-4 md:w-4 text-primary-foreground" />
+                      className="relative h-9 w-9 md:h-11 md:w-11 rounded-full bg-gradient-primary hover:shadow-lg transition-all duration-200 p-0 min-h-0 overflow-hidden">
+                      <div className="absolute inset-0 rounded-full bg-background/20 flex items-center justify-center">
+                      <User className="h-[1.125rem] w-[1.125rem] md:h-[1.375rem] md:w-[1.375rem] text-primary-foreground" />
                       </div>
-                    </Button>
+                      </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-64 md:w-72 p-2">
                     <div className="px-4 py-3 border-b border-border/50">

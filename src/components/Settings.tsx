@@ -216,20 +216,11 @@ export const Settings = () => {
   };
 
   return (
-    <div className="space-y-4 lg:space-y-6 pb-4 lg:pb-0">
+    <div className="space-y-4 lg:space-y-6 pb-4 lg:pb-0 p-2">
       <div className="flex items-center justify-between">
-        {/* Optional header actions can go here if needed later */}
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        {/* (Optional) TabsList if you later add more tabs */}
-        {/*
-        <TabsList className="w-full grid grid-cols-2 sm:inline-flex">
-          <TabsTrigger value="profile" className="w-full">Profile</TabsTrigger>
-          <TabsTrigger value="security" className="w-full">Security</TabsTrigger>
-        </TabsList>
-        */}
-
         <TabsContent value="profile" className="space-y-6">
           <div className="grid grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-3">
             {/* Profile Overview Card */}
@@ -257,10 +248,17 @@ export const Settings = () => {
                       <div className="absolute bottom-1 left-1 sm:bottom-2 sm:left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
                         Uploaded ID
                       </div>
-
                       <Dialog open={imageDialogOpen} onOpenChange={setImageDialogOpen}>
                         <DialogTrigger asChild>
-                        <Button size="sm" variant="secondary" className="absolute top-1 right-1 lg:top-2 lg:right-2 bg-black/70 hover:bg-black/80 text-white border-none h-8 w-8 lg:h-10 lg:w-10 p-0 flex items-center justify-center rounded-full"> <Eye className="h-3 w-3 lg:h-4 lg:w-4" /> </Button>
+                          
+                     <Button
+                    size="icon-lg"
+                    variant="secondary"
+                    className="absolute top-3 right-3 lg:top-4 lg:right-4 bg-black/70 hover:bg-black/80 text-white border-none p-0 min-h-0"
+                    >
+                    <Eye className="h-4 w-4 lg:h-5 lg:w-5" />
+                    </Button>
+                          
                         </DialogTrigger>
                         <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-auto">
                           <DialogHeader>

@@ -118,8 +118,13 @@ export const LoginForm = () => {
       <Card className="w-full max-w-md bg-card shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-xl font-semibold text-primary flex items-center justify-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setIsForgotPassword(false)} className="p-1 h-auto text-base bg-primary hover:bg-primary/90 text-primary-foreground">
-              <ArrowLeft className="h-4 w-4" />
+            <Button
+             variant="ghost"
+            size="icon-sm"
+            onClick={() => setIsForgotPassword(false)}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+                <ArrowLeft className="h-4 w-4" />
             </Button>
             Reset Password
           </CardTitle>

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Upload, Eye, ArrowLeft } from 'lucide-react';
 import { useUserAppeal, AppealFormData } from '@/hooks/useUserAppeal';
+import { ImageWithLoader } from '@/components/ui/ImageWithLoader';
 
 interface AppealFormProps {
   userId: string;
@@ -31,6 +32,7 @@ export const AppealForm = ({ userId, currentProfile, onCancel, onSuccess }: Appe
     idFile: null
   });
 
+  const [imageLoading, setImageLoading] = useState(false);
   const { submitAppeal, isLoading } = useUserAppeal();
 
   const handleInputChange = (field: keyof AppealFormData, value: string | File | null) => {
@@ -182,11 +184,13 @@ export const AppealForm = ({ userId, currentProfile, onCancel, onSuccess }: Appe
             
             {formData.idFile && (
               <div className="relative w-20 h-20">
-                <img 
+                <ImageWithLoader
                   src={URL.createObjectURL(formData.idFile)} 
                   alt="ID Preview" 
-                  className="w-full h-full object-cover rounded border animate-fade-in" 
-                  loading="lazy"
+                  className="w-full h-full object-cover rounded border"
+                  containerClassName="w-full h-full"
+                  loaderSize="sm"
+                  minLoadingTime={300}
                 />
                 <Dialog>
                   <DialogTrigger asChild>
@@ -194,17 +198,18 @@ export const AppealForm = ({ userId, currentProfile, onCancel, onSuccess }: Appe
                       type="button" 
                       variant="secondary" 
                       size="sm" 
-                      className="absolute top-1 right-1 h-6 w-6 p-0"
+                      className="absolute top-1 right-1 h-6 w-6 p-0 z-20"
                     >
                       <Eye className="h-3 w-3" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl">
-                     <img 
+                     <ImageWithLoader
                        src={URL.createObjectURL(formData.idFile)} 
                        alt="ID Full View" 
-                       className="w-full h-auto rounded animate-scale-in" 
-                       loading="lazy"
+                       className="w-full h-auto rounded"
+                       loaderSize="md"
+                       minLoadingTime={400}
                      />
                   </DialogContent>
                 </Dialog>

@@ -305,11 +305,32 @@ export const VotingAnalyticsDialog = ({ open, onOpenChange, elections, preSelect
             </Card>
           ) : (
             <Tabs defaultValue="course-breakdown" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="course-breakdown">Course Breakdown</TabsTrigger>
-                <TabsTrigger value="gender-distribution">Gender Distribution</TabsTrigger>
-                <TabsTrigger value="position-analysis">Position Analysis</TabsTrigger>
-              </TabsList>
+              
+              <TabsList className="flex w-full rounded-md bg-muted p-1 space-x-1">
+  <TabsTrigger
+    value="course-breakdown"
+    className="flex-1 text-center rounded-md data-[state=active]:bg-background data-[state=active]:text-foreground"
+  >
+    <span className="inline md:hidden">Breakdown</span>
+    <span className="hidden md:inline">Course Breakdown</span>
+  </TabsTrigger>
+
+  <TabsTrigger
+    value="gender-distribution"
+    className="flex-1 text-center rounded-md data-[state=active]:bg-background data-[state=active]:text-foreground"
+  >
+    <span className="inline md:hidden">Distribution</span>
+    <span className="hidden md:inline">Gender Distribution</span>
+  </TabsTrigger>
+
+  <TabsTrigger
+    value="position-analysis"
+    className="flex-1 text-center rounded-md data-[state=active]:bg-background data-[state=active]:text-foreground"
+  >
+    <span className="inline md:hidden">Analysis</span>
+    <span className="hidden md:inline">Position Analysis</span>
+  </TabsTrigger>
+</TabsList>
 
               <TabsContent value="course-breakdown" className="space-y-4">
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">

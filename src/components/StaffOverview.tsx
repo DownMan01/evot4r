@@ -95,7 +95,7 @@ export const StaffOverview = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-2">
       {/* Welcome Card */}
       <Card className="border-0 shadow-xl bg-gradient-to-br from-card via-card to-primary/5 overflow-hidden">
         <CardContent className="p-6 md:p-8 lg:p-12">
@@ -112,8 +112,10 @@ export const StaffOverview = () => {
               
               {/* Management Actions */}
               <div className="flex flex-wrap gap-3">
-                <CreateElectionForm />
-                <AddCandidateForm />
+             <div className="hidden md:flex gap-3">
+              <CreateElectionForm />
+              <AddCandidateForm />
+              </div>
                 <Button 
                         variant="outline"
                         onClick={() => {

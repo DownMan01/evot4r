@@ -105,7 +105,7 @@ export const AdminOverview = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-2">
       {/* Welcome Card */}
       <Card className="border-0 shadow-xl bg-gradient-to-br from-card via-card to-primary/5 overflow-hidden">
         <CardContent className="p-6 md:p-8 lg:p-12">
@@ -122,8 +122,10 @@ export const AdminOverview = () => {
               
               {/* Management Actions */}
               <div className="flex flex-wrap gap-3">
-                <CreateElectionForm />
-                <AddCandidateForm />
+                   <div className="hidden md:flex gap-3">
+                          <CreateElectionForm />
+                          <AddCandidateForm />
+                   </div>
                       <Button 
                         variant="outline"
                         onClick={() => {
@@ -159,7 +161,7 @@ export const AdminOverview = () => {
       </Card>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-4 md:gap-6">
          <Card>
            <CardHeader className="pb-2">
              <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -176,9 +178,10 @@ export const AdminOverview = () => {
          <Card>
            <CardHeader className="pb-2">
              <CardTitle className="text-sm font-medium flex items-center gap-2">
-               <Clock className="h-4 w-4 text-warning" />
-               Pending Users
-             </CardTitle>
+              <Clock className="h-4 w-4 text-warning" />
+              <span className="sm:hidden">Pending</span>
+              <span className="hidden sm:inline">Pending Users</span>
+              </CardTitle>
            </CardHeader>
            <CardContent>
              <div className="text-2xl font-bold text-warning">{loading ? '...' : stats.pendingUsers}</div>
@@ -204,9 +207,10 @@ export const AdminOverview = () => {
          <Card>
            <CardHeader className="pb-2">
              <CardTitle className="text-sm font-medium flex items-center gap-2">
-               <BarChart3 className="h-4 w-4 text-success" />
-               Active Election
-             </CardTitle>
+              <BarChart3 className="h-4 w-4 text-success" />
+              <span className="sm:hidden">Active</span>
+              <span className="hidden sm:inline">Active Election</span>
+              </CardTitle>
            </CardHeader>
            <CardContent>
              <div className="text-2xl font-bold text-success">{loading ? '...' : stats.activeElections}</div>

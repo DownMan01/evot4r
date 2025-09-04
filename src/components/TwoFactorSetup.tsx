@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { useTwoFactor } from '@/hooks/useTwoFactor';
 import { QrCode, Shield, Key, Copy, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { ImageWithLoader } from '@/components/ui/ImageWithLoader';
 
 interface TwoFactorSetupProps {
   open: boolean;
@@ -130,13 +131,13 @@ export const TwoFactorSetup = ({ open, onOpenChange, onComplete }: TwoFactorSetu
               </CardHeader>
               <CardContent className="space-y-3 px-4 pb-4">
                 <div className="flex justify-center p-3 bg-background rounded-lg w-full">
-                  <img
+                  <ImageWithLoader
                     src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
                       setupData.qrCode
                     )}`}
                     alt="2FA QR Code"
                     className="w-36 h-36 sm:w-44 sm:h-44 border rounded-lg"
-                    loading="lazy"
+                    loaderSize="md"
                   />
                 </div>
 

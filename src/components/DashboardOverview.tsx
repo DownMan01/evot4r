@@ -8,6 +8,7 @@ import { usePermissions } from '@/hooks/usePermissions';
 import { supabase } from '@/integrations/supabase/client';
 import { CreateElectionForm } from '@/components/CreateElectionForm';
 import { AddCandidateForm } from '@/components/AddCandidateForm';
+import { formatPhilippineDate } from '@/utils/dateUtils';
 
 interface QuickStats {
   activeElections: number;
@@ -138,13 +139,7 @@ export const DashboardOverview = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    return formatPhilippineDate(dateString, 'MMMM dd, yyyy h:mm a');
   };
 
   return (

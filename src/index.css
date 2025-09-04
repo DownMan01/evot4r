@@ -406,6 +406,13 @@ All colors MUST be HSL.
     overscroll-behavior: contain;
   }
 
+  .results-page .mobile-scroll {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  background: transparent !important;
+}
+
+
   /* Mobile navigation enhancements */
   .mobile-nav-item {
     min-height: 56px;

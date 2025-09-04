@@ -5,6 +5,7 @@ import { usePermissions } from '@/hooks/usePermissions';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Activity, LogIn, LogOut, User, Clock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { formatTimeAgoPhilippine, formatPhilippineDateTime } from '@/utils/dateUtils';
 
 interface VoterActivity {
   id: string;
@@ -111,20 +112,12 @@ export const RecentVoterActivityPanel = () => {
   };
 
   const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
-    if (diffInMinutes < 1) return 'Just now';
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
-    
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const timeAgo = formatTimeAgoPhilippine(timestamp);
+    if (timeAgo.includes('ago') || timeAgo === 'just now') {
+      return timeAgo;
+    }
+    // For older dates, show full date with Philippine time
+    return formatPhilippineDateTime(timestamp, 'MMM dd, h:mm a');
   };
 
   return (

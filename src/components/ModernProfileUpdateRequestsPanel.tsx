@@ -12,6 +12,7 @@ import { ListViewSkeleton } from '@/components/UnifiedLoadingSkeleton';
 import { RefreshButton } from '@/components/ui/refresh-button';
 import { SecureImage } from '@/components/ui/SecureImage';
 import { Users, Clock, CheckCircle, XCircle, MessageSquare, Calendar, Mail, GraduationCap, Eye, Filter } from 'lucide-react';
+import { formatPhilippineDate, formatPhilippineDateTime } from '@/utils/dateUtils';
 
 interface ModernProfileUpdateRequestsPanelProps {
   searchTerm: string;
@@ -152,7 +153,7 @@ export const ModernProfileUpdateRequestsPanel = ({
                             {getStatusBadge(request.status)}
                             <div className="text-xs text-muted-foreground flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
-                              {new Date(request.requested_at).toLocaleDateString()}
+                              {formatPhilippineDate(request.requested_at)}
                             </div>
                           </div>
                         </div>
@@ -383,7 +384,7 @@ export const ModernProfileUpdateRequestsPanel = ({
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Requested Date:</span>
                     <span className="text-muted-foreground">
-                      {new Date(selectedRequest.requested_at).toLocaleString()}
+                      {formatPhilippineDateTime(selectedRequest.requested_at)}
                     </span>
                   </div>
 
@@ -391,7 +392,7 @@ export const ModernProfileUpdateRequestsPanel = ({
                     <div className="flex items-center justify-between">
                       <span className="font-medium">Reviewed Date:</span>
                       <span className="text-muted-foreground">
-                        {new Date(selectedRequest.reviewed_at).toLocaleString()}
+                        {formatPhilippineDateTime(selectedRequest.reviewed_at)}
                       </span>
                     </div>
                   )}

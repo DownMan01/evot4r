@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Upload, ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
+import { ImageWithLoader } from '@/components/ui/ImageWithLoader';
 
 interface DuplicateCheckResult {
   email_exists: boolean;
@@ -392,40 +393,35 @@ export const MultiStepSignupForm = ({
                 
                 {formData.idFile && (
                   <div className="relative w-20 h-20">
-                    {previewLoading ? (
-                      <div className="w-full h-full bg-muted rounded border flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
-                      </div>
-                    ) : (
-                      <>
-                        <img 
+                    <ImageWithLoader
+                      src={URL.createObjectURL(formData.idFile)} 
+                      alt="ID Preview" 
+                      className="w-full h-full object-cover rounded border"
+                      containerClassName="w-full h-full"
+                      loaderSize="sm"
+                      minLoadingTime={300}
+                    />
+                    <Dialog open={showPreview} onOpenChange={setShowPreview}>
+                      <DialogTrigger asChild>
+                        <Button 
+                          type="button" 
+                          variant="secondary" 
+                          size="sm" 
+                          className="absolute top-1 right-1 h-6 w-6 p-0 z-20"
+                        >
+                          <Eye className="h-3 w-3" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl">
+                        <ImageWithLoader
                           src={URL.createObjectURL(formData.idFile)} 
-                          alt="ID Preview" 
-                          className="w-full h-full object-cover rounded border animate-fade-in" 
-                          loading="lazy"
+                          alt="ID Full View" 
+                          className="w-full h-auto rounded"
+                          loaderSize="md"
+                          minLoadingTime={400}
                         />
-                        <Dialog open={showPreview} onOpenChange={setShowPreview}>
-                          <DialogTrigger asChild>
-                            <Button 
-                              type="button" 
-                              variant="secondary" 
-                              size="sm" 
-                              className="absolute top-1 right-1 h-6 w-6 p-0"
-                            >
-                              <Eye className="h-3 w-3" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-2xl">
-                            <img 
-                              src={URL.createObjectURL(formData.idFile)} 
-                              alt="ID Full View" 
-                              className="w-full h-auto rounded animate-scale-in" 
-                              loading="lazy"
-                            />
-                          </DialogContent>
-                        </Dialog>
-                      </>
-                    )}
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 )}
               </div>

@@ -816,6 +816,17 @@ export type Database = {
           vote_count: number
         }[]
       }
+      get_election_blockchain_proofs: {
+       Args: { p_election_id: string }  // function input
+       Returns: {
+          id: string
+          election_id: string | null
+          ipfs_cid: string
+          results_hash: string
+          tx_hash: string
+          created_at: string  // ISO timestamp
+        }[]
+      }
       get_election_results: {
         Args: { p_election_id: string }
         Returns: {

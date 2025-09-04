@@ -19,6 +19,7 @@ import { ListViewSkeleton } from '@/components/UnifiedLoadingSkeleton';
 import { PaginationControls } from '@/components/PaginationControls';
 import { Calendar, Clock, Users, Vote, BarChart3, Search, MapPin, RefreshCw, Eye } from 'lucide-react';
 import { SecureImage } from '@/components/ui/SecureImage';
+import { formatPhilippineDateTime } from '@/utils/dateUtils';
 interface Election {
   id: string;
   title: string;
@@ -124,13 +125,7 @@ export const Elections = () => {
     }
   };
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    return formatPhilippineDateTime(dateString, 'yyyy MMM dd, h:mm a');
   };
 
   // Position hierarchy ranking system

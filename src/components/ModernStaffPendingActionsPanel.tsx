@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ListViewSkeleton } from '@/components/UnifiedLoadingSkeleton';
 import { RefreshButton } from '@/components/ui/refresh-button';
 import { Clock, CheckCircle, XCircle, Eye, Calendar, UserPlus, BarChart3, Settings } from 'lucide-react';
+import { formatPhilippineDateTime, formatPhilippineDate } from '@/utils/dateUtils';
 
 interface ModernStaffPendingActionsPanelProps {
   searchTerm: string;
@@ -122,11 +123,11 @@ export const ModernStaffPendingActionsPanel = ({
               </div>
               <div>
                 <span className="font-medium">Start Date:</span>
-                <span className="ml-2">{new Date(actionData.start_date).toLocaleString()}</span>
+                <span className="ml-2">{formatPhilippineDateTime(actionData.start_date)}</span>
               </div>
               <div>
                 <span className="font-medium">End Date:</span>
-                <span className="ml-2">{new Date(actionData.end_date).toLocaleString()}</span>
+                <span className="ml-2">{formatPhilippineDateTime(actionData.end_date)}</span>
               </div>
             </div>
             
@@ -239,7 +240,7 @@ export const ModernStaffPendingActionsPanel = ({
                             {getStatusBadge(action.status)}
                             <div className="text-xs text-muted-foreground flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
-                              {new Date(action.requested_at).toLocaleDateString()}
+                              {formatPhilippineDate(action.requested_at)}
                             </div>
                           </div>
                         </div>
@@ -254,12 +255,12 @@ export const ModernStaffPendingActionsPanel = ({
                           )}
                           
                           <p className="text-muted-foreground">
-                            Requested: {new Date(action.requested_at).toLocaleString()}
+                            Requested: {formatPhilippineDateTime(action.requested_at)}
                           </p>
                           
                           {action.status !== 'Pending' && action.reviewed_at && (
                             <p className={action.status === 'Approved' ? 'text-success' : 'text-destructive'}>
-                              {action.status}: {new Date(action.reviewed_at).toLocaleString()}
+                              {action.status}: {formatPhilippineDateTime(action.reviewed_at)}
                             </p>
                           )}
                           
@@ -321,12 +322,12 @@ export const ModernStaffPendingActionsPanel = ({
                     </div>
                     <div>
                       <span className="font-medium">Requested Date:</span>
-                      <p className="text-muted-foreground">{new Date(selectedAction.requested_at).toLocaleString()}</p>
+                      <p className="text-muted-foreground">{formatPhilippineDateTime(selectedAction.requested_at)}</p>
                     </div>
                     {selectedAction.reviewed_at && (
                       <div>
                         <span className="font-medium">Reviewed Date:</span>
-                        <p className="text-muted-foreground">{new Date(selectedAction.reviewed_at).toLocaleString()}</p>
+                        <p className="text-muted-foreground">{formatPhilippineDateTime(selectedAction.reviewed_at)}</p>
                       </div>
                     )}
                   </div>
