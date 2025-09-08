@@ -8,7 +8,7 @@ import {
   FileText,
   Users,
   ShieldCheck,
-  Vote
+  Vote,
 } from 'lucide-react';
 import {
   Card,
@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { useVoteReceipt } from '@/hooks/useVoteReceipt';
+import { supabase } from '@/integrations/supabase/client';
 
 interface VerificationData {
   receipt_id: string;
@@ -29,6 +30,7 @@ interface VerificationData {
   voting_date: string;
   created_at: string;
   is_valid: boolean;
+  tx_hash?: string | null;
 }
 
 const Verify = () => {
@@ -37,23 +39,66 @@ const Verify = () => {
   const [error, setError] = useState<string | null>(null);
   const { loading, verifyReceipt } = useVoteReceipt();
 
-  const receiptId = searchParams.get('receiptId');
+  const urlReceiptId = searchParams.get('receiptId'); // raw from URL
   const token = searchParams.get('token');
 
   const performVerification = useCallback(async () => {
-    if (!receiptId || !token) {
+    setError(null);
+    if (!urlReceiptId || !token) {
       setError('Missing receipt ID or verification token in URL');
       return;
     }
 
-    const result = await verifyReceipt(receiptId, token);
+    // 1) verify with existing hook
+    const result = await verifyReceipt(urlReceiptId, token);
 
-    if (result.success && result.data) {
-      setVerificationData(result.data as VerificationData);
-    } else {
+    if (!result.success || !result.data) {
       setError(result.error || 'Verification failed');
+      return;
     }
-  }, [receiptId, token, verifyReceipt]);
+
+    // prefer canonical receipt_id returned from verifyReceipt (some systems reformat or encode)
+    const canonicalReceiptId = (result.data as any).receipt_id || urlReceiptId;
+
+    // debug logs (open browser console)
+    // eslint-disable-next-line no-console
+    console.log('[Verify] urlReceiptId:', urlReceiptId, 'canonicalReceiptId:', canonicalReceiptId);
+
+    // 2) fetch the latest blockchain record for this receipt_id
+    let txHash: string | null = null;
+
+    try {
+      // select latest record (if multiple) by created_at desc
+      const { data: rows, error: blockchainError } = await supabase
+        .from('receipt_blockchain_record')
+        .select('tx_hash, created_at')
+        .eq('receipt_id', canonicalReceiptId)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      // debug
+      // eslint-disable-next-line no-console
+      console.log('[Verify] receipt_blockchain_record query result:', { rows, blockchainError });
+
+      if (blockchainError) {
+        // RLS or permission errors often show here
+        // eslint-disable-next-line no-console
+        console.warn('[Verify] blockchain fetch error:', blockchainError);
+      } else if (Array.isArray(rows) && rows.length > 0) {
+        txHash = (rows[0] as any).tx_hash ?? null;
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[Verify] unexpected error fetching blockchain record:', err);
+    }
+
+    // 3) combine and set state
+    setVerificationData({
+      ...(result.data as VerificationData),
+      receipt_id: canonicalReceiptId,
+      tx_hash: txHash,
+    });
+  }, [urlReceiptId, token, verifyReceipt]);
 
   useEffect(() => {
     performVerification();
@@ -112,44 +157,75 @@ const Verify = () => {
 
   if (!verificationData) return null;
 
+  const headerTxHash = verificationData.tx_hash ?? null;
+  const shortHash = headerTxHash ? `${headerTxHash.slice(0, 18)}...${headerTxHash.slice(-15)}` : null;
+  const explorerTxUrl = headerTxHash ? `https://testnet.polygonscan.com/tx/${headerTxHash}` : null;
+  const useMono = true;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-3 md:p-6 mobile-full-height">
       <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+        {/* Header */}
         <div className="text-center space-y-3 md:space-y-4 px-2">
           <div className="mx-auto h-16 w-16 md:h-20 md:w-20 rounded-full bg-primary/10 flex items-center justify-center shadow-sm">
             <CheckCircle className="h-6 w-6 md:h-8 md:w-8 text-primary" />
           </div>
           <h1 className="text-2xl md:text-4xl font-bold text-primary tracking-tight">Vote Verified</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-            Your vote has been successfully verified and recorded. See the verified receipt details below.
+            Your vote has been successfully verified and recorded. See details below.
           </p>
         </div>
 
+        {/* Election Info */}
         <Card className="border border-primary/20 shadow-sm rounded-2xl mx-2">
-          <CardHeader className="p-4 md:p-6">
+          <CardHeader className="p-4 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
               <FileText className="h-5 w-5 text-primary" />
               Election Information
             </CardTitle>
           </CardHeader>
+
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-4 md:p-6 pt-0">
             {[
               { icon: <Vote className="h-4 w-4 text-primary" />, label: 'Election Name', value: verificationData.election_title },
               { icon: <ShieldCheck className="h-4 w-4 text-primary" />, label: 'Election ID', value: verificationData.election_id, mono: true },
               { icon: <Calendar className="h-4 w-4 text-primary" />, label: 'Voting Date', value: formatDate(verificationData.voting_date) },
-              { icon: <QrCode className="h-4 w-4 text-primary" />, label: 'Receipt ID', value: verificationData.receipt_id, mono: true }
+              { icon: <QrCode className="h-4 w-4 text-primary" />, label: 'Receipt ID', value: verificationData.receipt_id, mono: true },
             ].map(({ icon, label, value, mono }, idx) => (
               <div key={idx} className="space-y-2">
                 <div className="flex items-center gap-2">
                   {icon}
                   <Badge variant="outline" className="bg-primary/5 text-xs">{label}</Badge>
                 </div>
-                <p className={`text-base ${mono ? 'font-mono text-sm text-muted-foreground' : 'font-semibold'}`}>{value}</p>
+                <p className={`text-base ${mono ? 'font-mono text-sm text-muted-foreground break-all' : 'font-semibold'}`}>
+                  {value}
+                </p>
               </div>
             ))}
+
+            {/* If tx exists, show full clickable hash here too */}
+            {shortHash && (
+              <div className="col-span-1 md:col-span-2 space-y-2">
+                <div className="flex items-center gap-2">
+                  <ExternalLinkIcon />
+                  <Badge variant="outline" className="bg-primary/5 text-xs">Blockchain Record</Badge>
+                </div>
+               <p className={`text-base ${useMono  ? 'font-mono text-sm text-muted-foreground break-all' : 'font-semibold'}`}>
+              <a
+                  href={explorerTxUrl!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  {shortHash}
+                  </a>
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
+        {/* Selected Candidates */}
         <Card className="border border-primary/20 shadow-sm rounded-2xl mx-2">
           <CardHeader className="p-4 md:p-6">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
@@ -161,26 +237,27 @@ const Verify = () => {
             {verificationData.selected_candidates
               .filter(item => item.candidate !== 'Unknown')
               .map((item, idx) => (
-              <div
-                key={idx}
-                className={`p-4 rounded-xl border transition-colors ${
-                  idx % 2 === 0 ? 'bg-primary/5 border-primary/10' : 'bg-secondary/40 border-secondary/30'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Badge className="text-xs bg-primary/10 text-primary border border-primary/20">
-                      {item.position}
-                    </Badge>
-                    <p className="font-semibold text-lg">{item.candidate}</p>
+                <div
+                  key={idx}
+                  className={`p-4 rounded-xl border transition-colors ${
+                    idx % 2 === 0 ? 'bg-primary/5 border-primary/10' : 'bg-secondary/40 border-secondary/30'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Badge className="text-xs bg-primary/10 text-primary border border-primary/20">
+                        {item.position}
+                      </Badge>
+                      <p className="font-semibold text-lg">{item.candidate}</p>
+                    </div>
+                    <CheckCircle className="h-5 w-5 text-primary" />
                   </div>
-                  <CheckCircle className="h-5 w-5 text-primary" />
                 </div>
-              </div>
               ))}
           </CardContent>
         </Card>
 
+        {/* Verification Complete */}
         <Card className="border border-primary/20 shadow-sm rounded-2xl mx-2">
           <CardContent className="p-4 md:p-6 space-y-4 md:space-y-6 text-center">
             <div className="mx-auto h-12 w-12 md:h-14 md:w-14 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
@@ -201,6 +278,7 @@ const Verify = () => {
           </CardContent>
         </Card>
 
+        {/* Return Home */}
         <div className="text-center px-2">
           <Button asChild className="rounded-full px-6 py-2 text-sm md:text-base shadow-md hover:shadow-lg transition touch-manipulation w-full sm:w-auto">
             <Link to="/">Return to Homepage</Link>
@@ -210,5 +288,16 @@ const Verify = () => {
     </div>
   );
 };
+
+// small inline component to avoid adding another icon import
+function ExternalLinkIcon() {
+  return (
+    <svg className="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M14 3h7v7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 14L21 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M21 21H3V3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 export default Verify;
