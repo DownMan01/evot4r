@@ -10,8 +10,11 @@ import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { MultiStepSignupForm } from './MultiStepSignupForm';
 import { TwoFactorVerification } from './TwoFactorVerification';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 export const LoginForm = () => {
+  const isMobile = useIsMobile();
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -115,30 +118,79 @@ export const LoginForm = () => {
 
   if (isForgotPassword) {
     return (
-      <Card className="w-full max-w-md bg-card shadow-xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl font-semibold text-primary flex items-center justify-center gap-2">
+      <Card className={cn(
+        "w-full animate-fade-in",
+        isMobile 
+          ? "max-w-sm mx-2 rounded-xl shadow-lg" 
+          : "max-w-md shadow-xl",
+        "bg-card border-border"
+      )}>
+        <CardHeader className={cn(
+          "text-center",
+          isMobile ? "px-4 py-4 pb-2" : "px-6 py-6 pb-4"
+        )}>
+          <div className="relative flex items-center justify-center">
             <Button
-             variant="ghost"
-            size="icon-sm"
-            onClick={() => setIsForgotPassword(false)}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              variant="ghost"
+              size={isMobile ? "sm" : "default"}
+              onClick={() => setIsForgotPassword(false)}
+              className={cn(
+                "absolute left-0 p-1 h-auto hover-scale",
+                isMobile && "min-w-8 min-h-8"
+              )}
             >
-                <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className={isMobile ? "h-3 w-3" : "h-4 w-4"} />
             </Button>
-            Reset Password
-          </CardTitle>
-          <p className="text-sm text-muted-foreground">
+            <CardTitle className={cn(
+              "font-semibold text-primary text-center",
+              isMobile ? "text-lg" : "text-xl"
+            )}>
+              Reset Password
+            </CardTitle>
+          </div>
+          <p className={cn(
+            "text-muted-foreground",
+            isMobile ? "text-xs" : "text-sm"
+          )}>
             Enter your email to receive password reset instructions
           </p>
         </CardHeader>
-        <CardContent>
+        <CardContent className={cn(
+          isMobile ? "px-4 pb-4" : "px-6 pb-6"
+        )}>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="resetEmail">Email Address</Label>
-              <Input id="resetEmail" type="email" placeholder="Enter your email address" value={resetEmail} onChange={e => setResetEmail(e.target.value)} required />
+              <Label 
+                htmlFor="resetEmail" 
+                className={cn(
+                  "font-medium",
+                  isMobile ? "text-sm" : "text-sm"
+                )}
+              >
+                Email Address
+              </Label>
+              <Input 
+                id="resetEmail" 
+                type="email" 
+                placeholder="Enter your email address" 
+                value={resetEmail} 
+                onChange={e => setResetEmail(e.target.value)} 
+                required 
+                className={cn(
+                  isMobile ? "h-12 text-base" : "h-10 text-sm"
+                )}
+                autoComplete="email"
+              />
             </div>
-            <Button type="submit" className="w-full bg-primary hover:bg-primary-600" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              className={cn(
+                "w-full bg-primary hover:bg-primary/90 font-medium hover-scale",
+                isMobile ? "h-12 text-base" : "h-10 text-sm"
+              )}
+              disabled={isLoading}
+              size={isMobile ? "default" : "sm"}
+            >
               {isLoading ? 'Sending...' : 'Send Reset Email'}
             </Button>
           </form>
@@ -152,19 +204,44 @@ export const LoginForm = () => {
   }
 
   return (
-    <Card className="w-full max-w-md bg-card shadow-xl lg:shadow-xl md:shadow-2xl border-0 lg:border">
-      <CardHeader className="text-center pb-4 lg:pb-6">
-        <CardTitle className="text-lg lg:text-xl font-semibold text-primary">
+    <Card className={cn(
+      "w-full animate-fade-in",
+      isMobile 
+        ? "max-w-sm mx-2 rounded-xl shadow-lg border-0" 
+        : "max-w-md shadow-xl border",
+      "bg-card"
+    )}>
+      <CardHeader className={cn(
+        "text-center",
+        isMobile ? "px-4 py-4 pb-2" : "px-6 py-6 pb-4"
+      )}>
+        <CardTitle className={cn(
+          "font-semibold text-primary",
+          isMobile ? "text-lg" : "text-xl"
+        )}>
           Vote Now!
         </CardTitle>
-        <p className="text-sm text-muted-foreground">
+        <p className={cn(
+          "text-muted-foreground",
+          isMobile ? "text-xs" : "text-sm"
+        )}>
           Every vote matters
         </p>
       </CardHeader>
-      <CardContent className="px-4 lg:px-6">
-        <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-4">
+      <CardContent className={cn(
+        isMobile ? "px-4 pb-4" : "px-6 pb-6"
+      )}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="studentId" className="text-sm font-medium">Student ID</Label>
+            <Label 
+              htmlFor="studentId" 
+              className={cn(
+                "font-medium",
+                isMobile ? "text-sm" : "text-sm"
+              )}
+            >
+              Student ID
+            </Label>
             <Input 
               id="studentId" 
               type="text" 
@@ -172,13 +249,23 @@ export const LoginForm = () => {
               value={studentId} 
               onChange={e => setStudentId(e.target.value)} 
               required 
-              className="h-12 lg:h-10 text-base lg:text-sm"
+              className={cn(
+                isMobile ? "h-12 text-base" : "h-10 text-sm"
+              )}
               autoComplete="username"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+            <Label 
+              htmlFor="password" 
+              className={cn(
+                "font-medium",
+                isMobile ? "text-sm" : "text-sm"
+              )}
+            >
+              Password
+            </Label>
             <div className="relative">
               <Input 
                 id="password" 
@@ -187,17 +274,27 @@ export const LoginForm = () => {
                 value={password} 
                 onChange={e => setPassword(e.target.value)} 
                 required 
-                className="h-12 lg:h-10 text-base lg:text-sm pr-12"
+                className={cn(
+                  "pr-12",
+                  isMobile ? "h-12 text-base" : "h-10 text-sm"
+                )}
                 autoComplete="current-password"
               />
               <Button 
                 type="button" 
                 variant="ghost" 
                 size="sm" 
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" 
+                className={cn(
+                  "absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent hover-scale",
+                  isMobile && "min-w-12"
+                )}
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? (
+                  <EyeOff className={isMobile ? "h-4 w-4" : "h-4 w-4"} />
+                ) : (
+                  <Eye className={isMobile ? "h-4 w-4" : "h-4 w-4"} />
+                )}
               </Button>
             </div>
           </div>
@@ -205,7 +302,10 @@ export const LoginForm = () => {
           <div className="text-right pt-1">
             <button 
               type="button" 
-              className="text-sm text-primary hover:underline active:text-primary-600" 
+              className={cn(
+                "text-primary hover:underline transition-colors hover-scale",
+                isMobile ? "text-sm" : "text-sm"
+              )}
               onClick={() => setIsForgotPassword(true)}
             >
               Forgot your password?
@@ -214,7 +314,10 @@ export const LoginForm = () => {
 
           <Button 
             type="submit" 
-            className="w-full bg-primary hover:bg-primary-600 h-12 lg:h-10 text-base lg:text-sm font-medium active:scale-[0.98] transition-transform" 
+            className={cn(
+              "w-full bg-primary hover:bg-primary/90 font-medium hover-scale transition-all",
+              isMobile ? "h-12 text-base" : "h-10 text-sm"
+            )}
             disabled={isLoading}
           >
             {isLoading ? 'Please wait...' : 'Login'}
@@ -223,7 +326,10 @@ export const LoginForm = () => {
           <div className="text-center pt-2">
             <button 
               type="button" 
-              className="text-sm text-primary hover:underline active:text-primary-600" 
+              className={cn(
+                "text-primary hover:underline transition-colors hover-scale",
+                isMobile ? "text-sm" : "text-sm"
+              )}
               onClick={() => setIsSignUp(true)}
             >
               Don't have an account? Sign up
