@@ -279,7 +279,7 @@ const Verify = () => {
         </Card>
 
         {/* Return Home */}
-        <div className="text-center px-2">
+       <div className="text-center px-2 mb-12 md:mb-20">
           <Button asChild className="rounded-full px-6 py-2 text-sm md:text-base shadow-md hover:shadow-lg transition touch-manipulation w-full sm:w-auto">
             <Link to="/">Return to Homepage</Link>
           </Button>
