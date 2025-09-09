@@ -163,8 +163,8 @@ const Verify = () => {
   const useMono = true;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-secondary/20 p-6 md:p-10 pt-12 md:pt-20 pb-12 md:pb-20 mobile-full-height">
-      <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+      <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-background to-secondary/20 p-6 md:p-10 pt-12 md:pt-20 pb-12 md:pb-20">
+        <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
         {/* Header */}
         <div className="text-center space-y-3 md:space-y-4 px-2">
           <div className="mx-auto h-16 w-16 md:h-20 md:w-20 rounded-full bg-primary/10 flex items-center justify-center shadow-sm">
