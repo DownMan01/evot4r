@@ -106,7 +106,7 @@ export const Candidates = () => {
   const [editingCandidate, setEditingCandidate] = useState<Candidate | null>(null);
   const [expandedElections, setExpandedElections] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
-  const LIMIT = 24;
+  const LIMIT = 50;
   const offset = (currentPage - 1) * LIMIT;
 
   const { profile, canViewCandidatesForElection } = usePermissions();
@@ -273,29 +273,58 @@ export const Candidates = () => {
         return <Card key={electionKey} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <Collapsible open={isExpanded} onOpenChange={() => toggleElectionExpanded(electionKey)}>
                   <CollapsibleTrigger asChild>
-                    <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors py-4 lg:py-6">
-                      <div className="flex items-center justify-between">
-                        {/* Mobile: Stack vertically, Desktop: Horizontal */}
-                        <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4 flex-1 min-w-0">
-                          <CardTitle className="text-lg lg:text-xl truncate">{electionData.election_title}</CardTitle>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <Badge className={`${getStatusColor(electionData.election_status)} text-white text-xs lg:text-sm`}>
-                              {electionData.election_status}
-                            </Badge>
-                            <Badge variant="outline" className="text-xs lg:text-sm">
-                              {electionData.candidates.length} candidate{electionData.candidates.length !== 1 ? 's' : ''}
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="flex-shrink-0 ml-2">
-                          {isExpanded ? <ChevronUp className="h-5 w-5 lg:h-6 lg:w-6" /> : <ChevronDown className="h-5 w-5 lg:h-6 lg:w-6" />}
-                        </div>
-                      </div>
-                    </CardHeader>
+                   <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors py-4 lg:py-6">
+  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-2">
+    
+    {/* Desktop view (unchanged) */}
+    <div className="hidden lg:flex lg:items-center lg:gap-2 w-full">
+      <CardTitle className="text-sm lg:text-base truncate">{electionData.election_title}</CardTitle>
+      <Badge className={`${getStatusColor(electionData.election_status)} text-white text-xs lg:text-sm`}>
+        {electionData.election_status}
+      </Badge>
+      <Badge variant="outline" className="text-xs lg:text-sm">
+        {electionData.candidates.length} candidate{electionData.candidates.length !== 1 ? 's' : ''}
+      </Badge>
+    </div>
+
+    {/* Mobile view */}
+    <div className="flex flex-col items-center lg:hidden w-full gap-2">
+      {/* Top: Title */}
+      <CardTitle className="text-sm truncate text-center">{electionData.election_title}</CardTitle>
+
+      {/* Bottom row: Status + Candidates + Arrow */}
+      <div className="flex items-center justify-center gap-2">
+        <Badge className={`${getStatusColor(electionData.election_status)} text-white text-xs`}>
+          {electionData.election_status}
+        </Badge>
+        <Badge variant="outline" className="text-xs">
+          {electionData.candidates.length} candidate{electionData.candidates.length !== 1 ? 's' : ''}
+        </Badge>
+
+        {/* Arrow on the right */}
+        {isExpanded ? (
+          <ChevronUp className="h-5 w-5" />
+        ) : (
+          <ChevronDown className="h-5 w-5" />
+        )}
+      </div>
+    </div>
+
+    {/* Desktop arrow on the right */}
+    <div className="hidden lg:flex flex-shrink-0 ml-2">
+      {isExpanded ? (
+        <ChevronUp className="h-5 w-5 lg:h-6 lg:w-6" />
+      ) : (
+        <ChevronDown className="h-5 w-5 lg:h-6 lg:w-6" />
+      )}
+    </div>
+  </div>
+</CardHeader>
+
                   </CollapsibleTrigger>
                   
                   <CollapsibleContent>
-                    <CardContent className="pt-0 pb-4 lg:pb-6">
+                    <CardContent className="pt-4 pb-4 lg:pt-6 lg:pb-6">
                       {/* Mobile: Single column, Desktop: Multi-column grid */}
                       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
                         {electionData.candidates.map(candidate => <div key={candidate.id} className="relative group">
