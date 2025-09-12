@@ -46,6 +46,21 @@ interface GroupedResults {
   };
 }
 
+const shortenCourseName = (course: string) => {
+  const replacements: { [key: string]: string } = {
+    'Bachelor of Science in Information Technology': 'BS in Information Technology',
+    'Bachelor of Science in Accountancy': 'BS in Accountancy',
+    'Bachelor of Science in Business Administration': 'BS in Business Administration',
+    'Bachelor of Science in Social Work': 'BS in Social Work',
+    'Bachelor of Elementary Education': 'B of Elementary Education',
+    'Bachelor of Secondary Education': 'B of Secondary Education',
+    'Bachelor of Physical Education': 'B of Physical Education',
+    'Bachelor of Science in Criminology': 'BS in Criminology',
+  };
+
+  return replacements[course] || course;
+};
+
 const getPositionRank = (positionTitle: string): number => {
   const normalizedTitle = positionTitle.toUpperCase().trim();
   const positionRanks: { [key: string]: number } = {
@@ -320,33 +335,51 @@ export const Results = () => {
             {Object.entries(filteredResults).map(([electionId, election]) => (
               <Card key={electionId} className="overflow-hidden">
                 <CardHeader className="pb-3 p-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <Trophy className="h-4 w-4 text-green-600 flex-shrink-0" />
-                      <CardTitle className="text-base lg:text-lg truncate">{election.election_title}</CardTitle>
-                      {election.tx_hash && (
-                        <a
-                          href={`https://testnet.polygonscan.com/tx/${election.tx_hash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center h-7 px-2 text-xs font-medium text-blue-700 bg-blue-100 rounded hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800 transition"
-                        >
-                          Blockchain Tx: {election.tx_hash.slice(0, 5)}...
-                        </a>
+                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0">
+                   <Trophy className="h-4 w-4 text-green-600 flex-shrink-0" />
+                    <CardTitle className="text-sm sm:text-base lg:text-lg whitespace-normal break-words">
+                    {election.election_title}
+                     </CardTitle>
+                     {election.tx_hash && (
+                 <a
+                  href={`https://testnet.polygonscan.com/tx/${election.tx_hash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="
+                      flex items-center justify-center
+                      w-7 h-7
+                      bg-blue-100 hover:bg-blue-200
+                      dark:bg-blue-900 dark:hover:bg-blue-800
+                      text-blue-700 hover:text-blue-800
+                      transition
+                      flex-shrink-0     
+                      sm:w-auto sm:h-auto sm:px-2 sm:py-0.5 sm:rounded sm:gap-1"
+                    style={{ minHeight: '0' }}
+                  >
+                    <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                    <span className="hidden sm:inline sm:text-xs ml-1">
+                      TxHash: {election.tx_hash.slice(0, 5)}...
+                    </span>
+                  </a>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Badge variant="outline" className="text-xs">{election.eligible_voters}</Badge>
+                      <div className="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto">
+                   <Badge
+                      variant="outline"
+                      className="text-xs sm:text-sm w-fit flex-shrink-0">
+                      <span className="sm:hidden">{shortenCourseName(election.eligible_voters)}</span>
+                      <span className="hidden sm:inline">{election.eligible_voters}</span>
+                   </Badge>
                       {(isStaff || isAdmin || (election.show_results_to_voters && Object.values(election.positions).length > 0)) && (
                         <Button
                           onClick={() => {
                             setSelectedElectionForAnalytics(electionId);
                             setElectionAnalyticsOpen(true);
                           }}
-                          variant="outline"
+                          variant="default"
                           size="sm"
-                          className="h-7 px-2 text-xs leading-none min-h-0"
-                        >
+                          className="h-7 px-2 text-xs leading-none min-h-0 ml-auto sm:ml-0">
                           <BarChart3 className="h-3 w-3 mr-1" />
                           View Analytics
                         </Button>
@@ -354,20 +387,18 @@ export const Results = () => {
                     </div>
                   </div>
                 </CardHeader>
-
                 <CardContent className="space-y-4 p-4 pt-0">
                   {Object.entries(election.positions)
                     .sort(([, a], [, b]) => a.rank - b.rank)
                     .map(([positionId, position]) => (
                       <div key={positionId} className="space-y-3">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                          <h3 className="text-sm font-semibold leading-tight">{position.position_title}</h3>
-                          <Badge variant="outline" className="text-xs w-fit flex items-center gap-1">
-                            <TrendingUp className="h-2 w-2" />
-                            {position.total_votes} votes
-                          </Badge>
-                        </div>
-
+                        <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-sm font-semibold leading-tight">{position.position_title}</h3>
+                    <Badge variant="outline" className="text-xs w-fit flex items-center gap-1">
+                      <TrendingUp className="h-2 w-2" />
+                      {position.total_votes} votes
+                    </Badge>
+                    </div>
                         <div className="space-y-2">
                           {position.candidates.map((candidate, index) => {
                             const isWinner = index === 0 && candidate.vote_count > 0;
@@ -385,7 +416,7 @@ export const Results = () => {
                                 }`}
                               >
                                 <div className="flex items-center justify-between mb-2">
-                                  <div className="flex items-center gap-2 min-w-0">
+                                  <div className="flex items-center gap-2 min-w-0 flex-wrap">
                                     {isWinner && <Trophy className="h-3 w-3 text-green-600 flex-shrink-0" />}
                                     <span className="font-medium text-sm truncate">{candidate.candidate_name}</span>
                                     {isWinner && (
