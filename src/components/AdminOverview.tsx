@@ -186,7 +186,8 @@ export const AdminOverview = () => {
            <CardContent>
              <div className="text-2xl font-bold text-warning">{loading ? '...' : stats.pendingUsers}</div>
              <Badge variant={stats.pendingUsers > 0 ? "destructive" : "secondary"} className="text-xs mt-1">
-               {stats.pendingUsers > 0 ? "Review Needed" : "All Clear"}
+               <span className="sm:hidden">{stats.pendingUsers > 0 ? "Review" : "Cleared"}</span>
+               <span className="hidden sm:inline">{stats.pendingUsers > 0 ? "Review Needed" : "All Clear"}</span>
              </Badge>
            </CardContent>
          </Card>
