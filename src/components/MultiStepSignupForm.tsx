@@ -266,7 +266,7 @@ export const MultiStepSignupForm = ({
           title: "Account Created",
           description: "Your account has been created successfully. Please wait for approval from the administrator."
         });
-        navigate('/dashboard');
+        navigate('/success');
       }
     } catch (error) {
       toast({
