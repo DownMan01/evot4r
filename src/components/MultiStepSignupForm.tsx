@@ -86,7 +86,7 @@ export const MultiStepSignupForm = ({
       case 1:
         if (!formData.fullName.trim()) {
           toast({
-            title: "Error",
+            title: "Full Name is Required",
             description: "Please enter your full name",
             variant: "destructive"
           });
@@ -94,15 +94,24 @@ export const MultiStepSignupForm = ({
         }
         if (!formData.email.trim()) {
           toast({
-            title: "Error",
+            title: "Email Address is Required",
             description: "Please enter your email address",
             variant: "destructive"
           });
           return false;
         }
+     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(formData.email)) {
+          toast({
+          title: "Invalid Email Address Format",
+          description: "Please enter a valid email address (e.g., example@gmail.com)",
+          variant: "destructive"
+          });
+            return false;
+        } 
         if (!formData.studentId.trim()) {
           toast({
-            title: "Error",
+            title: "Student ID is Required",
             description: "Please enter your student ID",
             variant: "destructive"
           });
@@ -112,7 +121,7 @@ export const MultiStepSignupForm = ({
       case 2:
         if (!formData.course) {
           toast({
-            title: "Error",
+            title: "Course is Required",
             description: "Please select your course",
             variant: "destructive"
           });
@@ -120,7 +129,7 @@ export const MultiStepSignupForm = ({
         }
         if (!formData.yearLevel) {
           toast({
-            title: "Error",
+            title: "Year Level is Required",
             description: "Please select your year level",
             variant: "destructive"
           });
@@ -128,7 +137,7 @@ export const MultiStepSignupForm = ({
         }
         if (!formData.gender) {
           toast({
-            title: "Error",
+            title: "Gender is Required",
             description: "Please select your gender",
             variant: "destructive"
           });
@@ -138,7 +147,7 @@ export const MultiStepSignupForm = ({
       case 3:
         if (formData.password.length < 6) {
           toast({
-            title: "Error",
+            title: "Password Too Short",
             description: "Password must be at least 6 characters",
             variant: "destructive"
           });
@@ -146,7 +155,7 @@ export const MultiStepSignupForm = ({
         }
         if (formData.password !== formData.confirmPassword) {
           toast({
-            title: "Error",
+            title: "Password Mismatch",
             description: "Passwords do not match",
             variant: "destructive"
           });
@@ -156,7 +165,7 @@ export const MultiStepSignupForm = ({
       case 4:
         if (!formData.idFile) {
           toast({
-            title: "Error",
+            title: "ID Image Required",
             description: "Please upload your ID",
             variant: "destructive"
           });
@@ -327,7 +336,7 @@ export const MultiStepSignupForm = ({
             
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-              <Input id="email" type="email" placeholder="Enter your email address" value={formData.email} onChange={e => handleInputChange('email', e.target.value)} required />
+              <Input id="email" type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" placeholder="Enter your email address" value={formData.email} onChange={e => handleInputChange('email', e.target.value)} required title="Please enter a valid email address (e.g., example@gmail.com)" />
             </div>
             
             <div className="space-y-2">
