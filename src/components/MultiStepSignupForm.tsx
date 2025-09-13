@@ -413,16 +413,26 @@ export const MultiStepSignupForm = ({
               <div className="flex gap-4">
                 <div className="flex-1">
                   <Input id="idUpload" type="file" accept="image/*" onChange={e => handleInputChange('idFile', e.target.files?.[0] || null)} className="hidden" required />
-                  <Button type="button" variant="outline" className="w-full h-20 border-dashed" onClick={() => document.getElementById('idUpload')?.click()}>
-                    <div className="flex flex-col items-center space-y-2">
-                      <Upload className="h-6 w-6" />
-                      <span className="text-sm">
-                        {formData.idFile ? formData.idFile.name.length > 20 ? formData.idFile.name.substring(0, 20) + '...' : formData.idFile.name : 'Choose ID image'}
-                      </span>
-                    </div>
-                  </Button>
+                 <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="upload"
+                    className="w-full border-dashed" 
+                    onClick={() => document.getElementById('idUpload')?.click()}
+                  >
+               <div className="flex flex-col items-center justify-center space-y-2 w-full">
+                <Upload className="h-6 w-6 flex-shrink-0" />
+                  <span className="text-sm text-center whitespace-normal break-words max-w-full px-1">
+                    {formData.idFile 
+                    ? formData.idFile.name.length > 30 
+                    ? `${formData.idFile.name.substring(0, 30)}...` 
+                    : formData.idFile.name
+                    : 'Choose ID image'
+                      }
+                  </span>
+              </div>
+                </Button>
                 </div>
-                
                 {formData.idFile && (
                   <div className="relative w-20 h-20">
                     <ImageWithLoader
