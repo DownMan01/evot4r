@@ -11,6 +11,8 @@ import { Eye, EyeOff, Upload, ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { ImageWithLoader } from '@/components/ui/ImageWithLoader';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface DuplicateCheckResult {
   email_exists: boolean;
@@ -35,6 +37,7 @@ interface MultiStepSignupFormProps {
 export const MultiStepSignupForm = ({
   onBackToLogin
 }: MultiStepSignupFormProps) => {
+  const isMobile = useIsMobile();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<SignupFormData>({
     fullName: '',
@@ -276,14 +279,43 @@ export const MultiStepSignupForm = ({
       setPreviewLoading(false);
     }
   };
-  const renderStepIndicator = () => <div className="flex items-center justify-center mb-8 space-x-2">
-      {steps.map((step, index) => <div key={step.id} className="flex items-center">
-          <div className={`step-indicator ${currentStep > step.id ? 'Completed' : currentStep === step.id ? 'Active' : 'Pending'}`}>
-            {currentStep > step.id ? <Check size={16} /> : step.id}
+  const renderStepIndicator = () => {
+    const isMobile = useIsMobile();
+    
+    return (
+      <div className={cn(
+        "flex items-center justify-center mb-6 sm:mb-8", 
+        isMobile ? "space-x-1" : "space-x-2"
+      )}>
+        {steps.map((step, index) => (
+          <div key={step.id} className="flex items-center">
+            <div className={cn(
+              "step-indicator flex items-center justify-center rounded-full border-2 transition-all duration-300",
+              isMobile ? "w-8 h-8 text-xs" : "w-10 h-10 text-sm",
+              currentStep > step.id 
+                ? 'bg-success border-success text-success-foreground' 
+                : currentStep === step.id 
+                  ? 'bg-primary border-primary text-primary-foreground' 
+                  : 'bg-background border-border text-muted-foreground'
+            )}>
+              {currentStep > step.id ? (
+                <Check className={isMobile ? "h-3 w-3" : "h-4 w-4"} />
+              ) : (
+                step.id
+              )}
+            </div>
+            {index < steps.length - 1 && (
+              <div className={cn(
+                "h-0.5 transition-colors duration-300",
+                isMobile ? "w-6 mx-1" : "w-12 mx-2",
+                currentStep > step.id ? 'bg-success' : 'bg-border'
+              )} />
+            )}
           </div>
-          {index < steps.length - 1 && <div className={`w-12 h-0.5 mx-2 transition-colors duration-300 ${currentStep > step.id ? 'bg-success' : 'bg-border'}`} />}
-        </div>)}
-    </div>;
+        ))}
+      </div>
+    );
+  };
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -435,41 +467,103 @@ export const MultiStepSignupForm = ({
         return null;
     }
   };
-  return <Card className="w-full max-w-md bg-white shadow-xl">
-      <CardHeader className="text-center">
-        <div className="flex items-center gap-2 mb-2">
-          <Button variant="ghost" size="sm" onClick={onBackToLogin} className="p-1 h-auto">
-            <ArrowLeft className="h-4 w-4" />
+  return (
+    <Card className={cn(
+      "w-full animate-fade-in",
+      isMobile 
+        ? "max-w-sm mx-2 rounded-xl shadow-lg" 
+        : "max-w-md shadow-xl",
+      "bg-card border-border"
+    )}>
+      <CardHeader className={cn(
+        "text-center",
+        isMobile ? "px-4 py-4 pb-2" : "px-6 py-6 pb-4"
+      )}>
+        <div className="relative flex items-center justify-center mb-2">
+          <Button 
+            variant="ghost" 
+            size={isMobile ? "sm" : "default"}
+            onClick={onBackToLogin} 
+            className={cn(
+              "absolute left-0 p-1 h-auto hover-scale",
+              isMobile && "min-w-8 min-h-8"
+            )}
+          >
+            <ArrowLeft className={isMobile ? "h-3 w-3" : "h-4 w-4"} />
           </Button>
-          <CardTitle className="text-xl font-semibold text-primary flex-1">
+          <CardTitle className={cn(
+            "font-semibold text-primary text-center",
+            isMobile ? "text-lg" : "text-xl"
+          )}>
             Create Account
           </CardTitle>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className={cn(
+          "text-muted-foreground",
+          isMobile ? "text-xs" : "text-sm"
+        )}>
           {steps[currentStep - 1]?.title} - Step {currentStep} of {steps.length}
         </p>
       </CardHeader>
       
-      <CardContent>
+      <CardContent className={cn(
+        isMobile ? "px-4 pb-4" : "px-6 pb-6"
+      )}>
         {renderStepIndicator()}
         
         <div className="step-transition">
           {renderStep()}
         </div>
         
-        <div className="flex justify-between mt-6 space-x-3">
-          {currentStep > 1 && <Button type="button" variant="outline" onClick={prevStep} className="flex-1">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+        <div className={cn(
+          "flex justify-between mt-6",
+          isMobile ? "space-x-2" : "space-x-3"
+        )}>
+          {currentStep > 1 && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={prevStep} 
+              className="flex-1 hover-scale"
+              size={isMobile ? "sm" : "default"}
+            >
+              <ArrowLeft className={cn(
+                "mr-2",
+                isMobile ? "h-3 w-3" : "h-4 w-4"
+              )} />
               Previous
-            </Button>}
+            </Button>
+          )}
           
-          {currentStep < steps.length ? <Button type="button" onClick={nextStep} className={`${currentStep === 1 ? 'w-full' : 'flex-1'} bg-primary hover:bg-primary-600`}>
+          {currentStep < steps.length ? (
+            <Button 
+              type="button" 
+              onClick={nextStep} 
+              className={cn(
+                "bg-primary hover:bg-primary/90 hover-scale",
+                currentStep === 1 ? 'w-full' : 'flex-1'
+              )}
+              size={isMobile ? "sm" : "default"}
+            >
               Next
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button> : <Button type="button" onClick={handleSubmit} className="flex-1 bg-primary hover:bg-primary-600" disabled={loading}>
+              <ArrowRight className={cn(
+                "ml-2",
+                isMobile ? "h-3 w-3" : "h-4 w-4"
+              )} />
+            </Button>
+          ) : (
+            <Button 
+              type="button" 
+              onClick={handleSubmit} 
+              className="flex-1 bg-primary hover:bg-primary/90 hover-scale" 
+              disabled={loading}
+              size={isMobile ? "sm" : "default"}
+            >
               {loading ? 'Creating Account...' : 'Create Account'}
-            </Button>}
+            </Button>
+          )}
         </div>
       </CardContent>
-    </Card>;
+    </Card>
+  );
 };
