@@ -31,6 +31,7 @@ const buttonVariants = cva(
           icon: "h-11 w-11 rounded-full text-[0px] leading-none p-0 min-h-0",
           "icon-sm": "h-6 w-6 rounded-full text-[0px] leading-none p-0 min-h-0",
           "icon-lg": "h-9 w-9 rounded-full text-[0px] leading-none p-0 min-h-0",
+        upload: "h-auto max-h-20 lg:max-h-24 px-4 py-3 text-sm font-medium leading-relaxed lg:px-6 lg:py-4",
       },
     },
     defaultVariants: {
