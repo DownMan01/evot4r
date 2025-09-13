@@ -139,7 +139,7 @@ export const useOptimizedCandidates = (options: UseOptimizedCandidatesOptions = 
       console.error('Error fetching candidates:', err);
       setError(err.message);
       toast({
-        title: "Error",
+        title: "Whoa, slow down!",
         description: "Failed to load candidates. Please try again.",
         variant: "destructive",
       });
