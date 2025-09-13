@@ -127,7 +127,7 @@ export const useOptimizedElections = (options: UseOptimizedElectionsOptions = {}
       setError('Failed to load elections. Please check your connection and try again.');
       if (showLoading) {
         toast({
-          title: "Error",
+          title: "Whoa, slow down!",
           description: "Failed to load elections. Please try again.",
           variant: "destructive",
         });
